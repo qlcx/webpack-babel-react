@@ -58,7 +58,7 @@ const config = webpackMerge(webpackBaseConfig, {
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
-      minChunks: Infinity
+      minChunks: ['vendor']
     }),
     new ExtractTextPlugin('styles.css')
   ]
