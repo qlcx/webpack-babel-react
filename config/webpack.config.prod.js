@@ -50,10 +50,15 @@ const config = webpackMerge(webpackBaseConfig, {
         },
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function(module){
+        return module.context && module.context.indexOf("node_modules") !== -1;
+      }
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
-      chunks: ['vendor']
+      minChunks: Infinity
     }),
     new ExtractTextPlugin('styles.css')
   ]
