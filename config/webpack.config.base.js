@@ -10,7 +10,7 @@ const config = {
   output: {
     path: paths.appDist,
     filename: 'assets/js/[name].js',
-    chunkFilename: '[name].child.js'
+    chunkFilename: 'assets/js/[name].child.js'
   },
   resolve: {
     extensions: ['.js', '.jsx']
