@@ -1,14 +1,21 @@
 import React from 'react'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 
-import Home from './views/Home'
-import NoRouter from './views/NoRouter'
+import Bundle from './components/shared/Bundle'
 
 const router = () => {
   return <Router>
     <Switch>
-      <Route path='/' exact component={Home} />
-      <Route component={NoRouter} />
+      <Route path='/' exact render={() => {
+        return <Bundle load={() => import('./views/Home')}>
+          {Home => <Home></Home>}
+        </Bundle>
+      }} />
+      <Route render={() => {
+        return <Bundle load={() => import('./views/NoRouter')}>
+          {NoRouter => <NoRouter></NoRouter>}
+        </Bundle>
+      }} />
     </Switch>
   </Router>
 }

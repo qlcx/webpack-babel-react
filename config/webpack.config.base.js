@@ -5,11 +5,12 @@ const paths = require('./paths')
 
 const config = {
   entry: {
-    app: path.join(paths.appSrc, 'app')
+    app: ['babel-polyfill', path.join(paths.appSrc, 'app')]
   },
   output: {
     path: paths.appDist,
-    filename: 'assets/js/[name].js'
+    filename: 'assets/js/[name].js',
+    chunkFilename: '[name].child.js'
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -22,7 +23,7 @@ const config = {
     }]
   },
   plugins: [
-    new BundleAnalyzerPlugin(),    
+    // new BundleAnalyzerPlugin(),    
     new HtmlWebpackPlugin({
       template: path.join(paths.appSrc, 'index.html')
     })

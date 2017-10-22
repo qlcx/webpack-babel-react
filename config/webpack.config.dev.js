@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000
 
 const config = webpackMerge(webpackBaseConfig, {
   entry: [
+    'babel-polyfill',
     'react-hot-loader/patch',
     path.join(paths.appSrc, 'app')
   ],
