@@ -50,6 +50,7 @@ const config = webpackMerge(webpackBaseConfig, {
         },
       }
     }),
+    new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
