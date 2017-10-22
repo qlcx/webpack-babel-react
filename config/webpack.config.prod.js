@@ -52,12 +52,14 @@ const config = webpackMerge(webpackBaseConfig, {
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
+      filename: '[name].[chunkhash].js',
       minChunks: function(module){
         return module.context && module.context.indexOf("node_modules") !== -1;
       }
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
+      filename: '[name].[chunkhash].js',
       minChunks: ['vendor']
     }),
     new ExtractTextPlugin('styles.css')
