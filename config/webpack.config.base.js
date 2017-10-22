@@ -1,5 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const paths = require('./paths')
 
 const config = {
@@ -21,6 +22,7 @@ const config = {
     }]
   },
   plugins: [
+    new BundleAnalyzerPlugin(),    
     new HtmlWebpackPlugin({
       template: path.join(paths.appSrc, 'index.html')
     })
