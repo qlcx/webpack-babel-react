@@ -12,14 +12,14 @@ const config = webpackMerge(webpackBaseConfig, {
   },
   module: {
     rules: [{
-      test: /.css$/,
+      test: /\.css$/,
       include: path.resolve(paths.appSrc, './styles'),
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
         use: 'css-loader'
       })
     },{
-      test: /.(css|scss)$/,
+      test: /\.(css|scss)$/,
       exclude: path.resolve(paths.appSrc, './styles'),
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',

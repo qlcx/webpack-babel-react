@@ -17,11 +17,11 @@ const config = webpackMerge(webpackBaseConfig, {
   devtool: 'source-map',
   module: {
     rules: [{
-      test: /.css$/,
+      test: /\.css$/,
       include: path.resolve(paths.appSrc, './styles'),
       use: [ 'style-loader', 'css-loader']
     },{
-      test: /.(css|scss)$/,
+      test: /\.(css|scss)$/,
       exclude: path.resolve(paths.appSrc, './styles'),
       use: [
         'style-loader',
