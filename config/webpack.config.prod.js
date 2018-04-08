@@ -11,7 +11,7 @@ const webpackBaseConfig = require('./webpack.config.base');
 const config = webpackMerge(webpackBaseConfig, {
   mode: 'production',
   entry: {
-    vendor: ['react', 'react-dom', 'react-router', 'react-router-dom']
+    vendor: ['react', 'react-dom', 'react-router-dom']
   },
   module: {
     rules: [{
