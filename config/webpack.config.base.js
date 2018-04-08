@@ -1,7 +1,9 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const paths = require('./paths')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const HappyPack = require('happypack');
+const happyThreadPool = require('./happyThreadPool');
+const paths = require('./paths');
 
 const config = {
   entry: {
@@ -9,8 +11,7 @@ const config = {
   },
   output: {
     path: paths.appDist,
-    filename: 'assets/js/[name].js',
-    chunkFilename: 'assets/js/[name].child.js'
+    filename: 'assets/js/[name].js'
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -19,15 +20,21 @@ const config = {
     rules: [{
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      use: ['babel-loader']
+      use: 'happypack/loader?id=js'
     }]
   },
   plugins: [
-    // new BundleAnalyzerPlugin(),    
+    // new BundleAnalyzerPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(paths.appSrc, 'index.html')
+    }),
+
+    new HappyPack({
+      id: 'js',
+      threadPool: happyThreadPool,
+      loaders: ['babel-loader']
     })
   ]
-}
+};
 
-module.exports = config
+module.exports = config;

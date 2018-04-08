@@ -1,12 +1,15 @@
-const path = require('path')
-const webpack = require('webpack')
-const webpackMerge = require('webpack-merge')
-const UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const paths = require('./paths')
-const webpackBaseConfig = require('./webpack.config.base')
+const path = require('path');
+const webpack = require('webpack');
+const webpackMerge = require('webpack-merge');
+const UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HappyPack = require('happypack');
+const happyThreadPool = require('./happyThreadPool');
+const paths = require('./paths');
+const webpackBaseConfig = require('./webpack.config.base');
 
 const config = webpackMerge(webpackBaseConfig, {
+  mode: 'production',
   entry: {
     vendor: ['react', 'react-dom', 'react-router', 'react-router-dom']
   },
@@ -16,17 +19,14 @@ const config = webpackMerge(webpackBaseConfig, {
       include: path.resolve(paths.appSrc, './styles'),
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
-        use: 'css-loader'
+        use: 'happypack/loader?id=css'
       })
-    },{
+    }, {
       test: /\.(css|scss)$/,
       exclude: path.resolve(paths.appSrc, './styles'),
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
-        use: [
-          'css-loader?modules&localIdentName=[name]__[local]',
-          'sass-loader?sourceMap=true'
-        ]
+        use: 'happypack/loader?id=modulecss'
       })
     }]
   },
@@ -50,20 +50,43 @@ const config = webpackMerge(webpackBaseConfig, {
         },
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: '[name].[chunkhash].js',
-      minChunks: function(module){
-        return module.context && module.context.indexOf("node_modules") !== -1;
+    new webpack.optimize.SplitChunksPlugin({
+      cacheGroups: {
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+        vendor: {
+          name: 'vendor',
+          filename: '[name].[chunkhash].js',
+          chunks: 'initial',
+          minChunks: 2,
+          maxInitialRequests: 5, // The default limit is too small to showcase the effect
+          minSize: 0 // This is example is too small to create commons chunks
+        },
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({
+    new webpack.optimize.RuntimeChunkPlugin({
       name: 'manifest',
-      filename: '[name].[chunkhash].js',
-      minChunks: ['vendor']
     }),
-    new ExtractTextPlugin('styles.css')
-  ]
-})
+    new ExtractTextPlugin('styles.css'),
 
-module.exports = config
+    new HappyPack({
+      id: 'css',
+      threadPool: happyThreadPool,
+      loaders: ['css-loader'],
+    }),
+
+    new HappyPack({
+      id: 'modulecss',
+      threadPool: happyThreadPool,
+      loaders: [
+        'css-loader?modules&localIdentName=[name]__[local]',
+        'sass-loader?sourceMap=true'
+      ]
+    })
+  ]
+});
+
+module.exports = config;

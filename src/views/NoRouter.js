@@ -1,11 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-import styles from './NoRouter.scss'
+import styles from './NoRouter.scss';
 
 const NoRouter = () => {
-  return <div className={styles.text}>
-    No Route
-  </div>
-}
+  return <div className={styles.text}>No Route</div>;
+};
 
-export default NoRouter
+export default NoRouter;
