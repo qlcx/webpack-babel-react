@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
-const UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HappyPack = require('happypack');
 const happyThreadPool = require('./happyThreadPool');
@@ -34,22 +33,7 @@ const config = webpackMerge(webpackBaseConfig, {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
     }),
-    new UglifyjsWebpackPlugin({
-      uglifyOptions: {
-        ie8: false,
-        output: {
-          comments: false,
-          beautify: false,
-        },
-        mangle: {
-          keep_fnames: true
-        },
-        compress: {
-          warnings: false,
-          drop_console: true
-        },
-      }
-    }),
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.SplitChunksPlugin({
       cacheGroups: {
         default: {
